@@ -21,13 +21,13 @@ st.markdown("""
             overflow-x: hidden !important;
     }
     h1 {
-        font-size: 8vw !important;
+        font-size: 10vw !important;
         text-align: center;
     }
     .subtitle {
-        font-size: 1.6vw !important;
+        font-size: 2.2vw !important;
         text-align: center;
-        color: #070384
+        color: #070384;
         margin-top: 5px;
     }
     [data-testid="stAppViewContainer"] {
@@ -63,6 +63,14 @@ st.markdown("""
     }
     canvas {
         max-width: 100% !important;
+    }
+    div[data-testid="stNotificationContentSuccess"] {
+        color: #2B7300 !important;
+        font-weight: bold;
+    }
+    div[data-testid="stNotificationContentError"] {
+        color: #B00020 !important;
+        font-weight: bold;
     }
     </style>
 """, unsafe_allow_html=True)
