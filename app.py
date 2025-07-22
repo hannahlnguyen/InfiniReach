@@ -64,18 +64,6 @@ st.markdown("""
     canvas {
         max-width: 100% !important;
     }
-    div.stAlrtSuccess {
-        color: #2B7300 !important;
-        font-weight: bold;
-    }
-    div.stAlertError {
-        color: #B00020 !important;
-        font-weight: bold;
-    }
-    div.stAlertInfo {
-        color: #070384 !important;
-        font-weight: bold;
-    }
     </style>
 """, unsafe_allow_html=True)
 
