@@ -5,27 +5,34 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
-# ------------------ PAGE CONFIG ------------------
+# Configure page
+# Set app icon
 st.set_page_config(page_title="Deposit Predictor", page_icon="Infinitive Bug.JPG", layout="wide")
-# ------------------ LOAD MODEL ------------------
+
+# Load XGBoost model
 model = xgb.XGBClassifier()
 model.load_model("xgb_deposit_model.json")
 
-# ------------------ GLOBAL STYLING ------------------
+# Global CSS styling
 st.markdown("""
     <style>
     html, body, [class*="css"]  {
         font-family: Verdana, sans-serif !important;
+            overflow-x: hidden !important;
+    }
+    h1 {
+        font-size: 8vw !important;
+        text-align: center;
+    }
+    .subtitle {
+        font-size: 1.6vw !important;
+        text-align: center;
+        color: #070384
+        margin-top: 5px;
     }
     [data-testid="stAppViewContainer"] {
         background: linear-gradient(to bottom, #D1CFFE, #3B36C9);
         background-attachment: fixed;
-    }
-    .subtitle {
-        text-align: center;
-        font-size: 35px;
-        color: #070384;
-        margin-top: 5px;
     }
     section[data-testid="stSidebar"] > div:first-child {
         background: linear-gradient(to bottom, #FDDFB2, #FDA51E);
@@ -39,14 +46,14 @@ st.markdown("""
         border-radius: 20px;
         font-weight: bold;
         border: none;
+        font-size: 1rem !important;
+        padding: 0.75rem 1.5rem !important
         transition: color 0.2s ease-in-out;
     }
-
     div.stButton > button:hover {
         color: #3B36C9;
         font-weight: bold;
-    }
-            
+    }  
     div[data-testid="stExpander"] {
         background-color: rgba(255, 255, 255, 0.8);
         border-radius: 20px;
@@ -54,25 +61,28 @@ st.markdown("""
         box-shadow: 0 0 20px rgba(0,0,0,0.2);
         color: #3B36C9
     }
+    canvas {
+        max-width: 100% !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
-# ------------------ HEADER ------------------
+# Name of app
 st.markdown(
     "<h1 style='text-align:center; font-size: 80px; color: #E16600; font-weight: bold;'>INFINIREACH</h1>",
     unsafe_allow_html=True
 )
 
+# Web app description
 st.markdown("<p class='subtitle'>Predict deposit subscription likelihood based on customer demographics and campaign data. Powered by machine learning.</p>", unsafe_allow_html=True)
 
-# ------------------ INPUT LOGIC (SIDEBAR) ------------------
+# Sidebar form title
 st.sidebar.markdown(
     "<span style='font-size: 28px; color: #3B36C9; font-weight: bold;'>Deposit Predictor</span>",
     unsafe_allow_html=True
 )
 
-
-
+# Match job category name in form to its encoded value
 job_options = {
     "Admin.": 0,
     "Blue Collar": 1,
@@ -88,21 +98,25 @@ job_options = {
     "Unknown": 11
 }
 
-age = st.sidebar.number_input("Age", min_value=18, max_value=100, value=35, help="Customer age in years")
-job = st.sidebar.selectbox("Job", list(job_options.keys()), help="Customer job category")
-job_encoded = job_options[job]
-balance = st.sidebar.number_input("Balance", value=1000, help="Customer average yearly balance")
-month = st.sidebar.slider("Month", 1, 12, 5, help="Last contact month (1-12)")
-day = st.sidebar.slider("Day", 1, 31, 15, help="Last contact day of month")
-duration = st.sidebar.number_input("Duration", value=100, help="Last contact duration (sec.)")
-campaign = st.sidebar.slider("Campaign", 1, 20, 2, help="Number of contacts during campaign")
-pdays = st.sidebar.number_input("Days Since", value=999, help="Days since previous campaign")
+# Sidebar form input
+with st.sidebar.form("predict_form"):
+    age = st.sidebar.number_input("Age", min_value=18, max_value=100, value=35, help="Customer age in years")
+    job = st.sidebar.selectbox("Job", list(job_options.keys()), help="Customer job category")
+    job_encoded = job_options[job]
+    balance = st.sidebar.number_input("Balance", value=1000, help="Customer average yearly balance")
+    month = st.sidebar.slider("Month", 1, 12, 5, help="Last contact month (1-12)")
+    day = st.sidebar.slider("Day", 1, 31, 15, help="Last contact day of month")
+    duration = st.sidebar.number_input("Duration", value=100, help="Last contact duration (sec.)")
+    campaign = st.sidebar.slider("Campaign", 1, 20, 2, help="Number of contacts during campaign")
+    pdays = st.sidebar.number_input("Days Since", value=999, help="Days since previous campaign")
 
-# ------------------ FEATURE ENGINEERING ------------------
+# Feature Engineering
+# Campaign intensity
 contact_effort_level = campaign * duration
+# Campaign effort vs finances
 balance_per_contact = balance / (campaign + 1)
-campaign_month_num = month
 
+# Connect input to dataset columns
 X_input = pd.DataFrame([{
     "age": age,
     "job": job_encoded,
@@ -112,29 +126,23 @@ X_input = pd.DataFrame([{
     "duration": duration,
     "campaign": campaign,
     "pdays": pdays,
-    "campaign_month_num": campaign_month_num,
     "contact_effort_level": contact_effort_level,
     "balance_per_contact": balance_per_contact
 }])
 
+# Prediction form button
 predict_btn = st.sidebar.button("Predict")
 prediction = None
 proba = None
-
 if predict_btn:
     prediction = model.predict(X_input)[0]
     proba = model.predict_proba(X_input)[0]
 
-# ------------------ PREDICTION + CHART ------------------
-
-##col_center = st.columns([1, 6, 1])[1]  # center the content in the middle column
-
+# Model prediction results visual
 with st.expander("📊 Probability Breakdown", expanded=True):
     if predict_btn and prediction is not None:
-
         result_text = "✔️ Likely to Subscribe" if prediction == 1 else "❌ Unlikely to Subscribe"
-
-        # Show title and result above the pie chart
+        # Bar graph title and prediction result
         st.markdown(
             f"""
             <div style='font-size: 28px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px;'>
@@ -144,38 +152,28 @@ with st.expander("📊 Probability Breakdown", expanded=True):
             """,
             unsafe_allow_html=True
         )
-
-
-
-        # --- Draw horizontal bar chart ---
-        
+        # Horizontal bar chart (deposit subscription likelihood)
         labels = ['Will Not Subscribe', 'Will Subscribe']
         colors = ['#E16600', '#3B36C9']
-
         fig, ax = plt.subplots(figsize=(6, 2))
         bars = ax.barh(labels, proba, color=colors)
-
-# Style the chart
         ax.set_xlim(0, 1)
         ax.set_xlabel("Probability")
-
-# Add value labels next to bars
         for bar, p in zip(bars, proba):
             ax.text(p + 0.02, bar.get_y() + bar.get_height()/2, f"{p:.1%}", va='center', fontsize=10)
-
-# Remove spines for cleaner look
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
         ax.spines['left'].set_visible(False)
-
         st.pyplot(fig)
+    # Instructions for user to complete form
     else:
         st.info("👈 Enter inputs and click **Predict** to view probability breakdown.")
 
+# Campaign suggestions
 with st.expander("🧠 Campaign Suggestions", expanded=False):
     if predict_btn and prediction is not None:
         suggestions = []
-
+        # Suggestions if deposit subscription is unlikely
         if prediction == 0:
             st.error("😥 This customer is unlikely to subscribe. Try implementing the following strategies.")
             if duration < 300:
@@ -186,15 +184,14 @@ with st.expander("🧠 Campaign Suggestions", expanded=False):
                 suggestions.append("🔁 Increase contact frequency, customer may feel neglected.")
             if pdays > 100:
                 suggestions.append("🕓 Try re-engaging, previous campaign was too long ago.")
-            if balance < 1100:
+            if balance < 1200:
                 suggestions.append("💰 Offer incentives, low balance customers may need stronger motivation.")
-
             if suggestions:
                 for s in suggestions:
                     st.markdown(f"- {s}")
             else:
                 st.markdown("✅ Campaign strategy is generally strong. Consider refining message tone or communication type.")
-
+        # Suggestions if deposit subscription is likely
         else:
             st.success("😆 This customer is likely to subscribe! Keep doing what works.")
             st.markdown("""
@@ -202,16 +199,17 @@ with st.expander("🧠 Campaign Suggestions", expanded=False):
             - 🥇 Consider offering a loyalty bonus
             - 💰 Upsell or cross-sell with other financial products
             """)
+    # Instructions for user to complete form
     else:
         st.info("👈 Enter inputs and click **Predict** to view campaign suggestions.")
                 
-
 # Feature importance visual
 with st.expander("🔍 Feature Importance"):
     fig_imp, ax_imp = plt.subplots()
     xgb.plot_importance(model, ax=ax_imp)
     st.pyplot(fig_imp)
 
+# Model performance stats
 with st.expander("⚙️ Model Performance", expanded=False):
     st.markdown("""
     - **Accuracy:** 84%  
@@ -222,7 +220,7 @@ with st.expander("⚙️ Model Performance", expanded=False):
         - No Deposit: 83%
         - Deposit: 85%
     - **F1-Score:**
-        - No Deposit: 85%
+        - No Deposit: 84%
         - Deposit: 83%
     - **Macro Average F1-Score:** 84%
     - **Weighted Average F1-Score:** 84%
