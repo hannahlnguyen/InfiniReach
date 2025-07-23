@@ -67,20 +67,20 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Divide app into 2 tabs
+# Name of app
+st.markdown(
+    "<h1 style='text-align:center; font-size: 80px; color: #E16600; font-weight: bold;'>INFINIREACH</h1>",
+    unsafe_allow_html=True
+)
+
+# Web app description
+st.markdown("<p class='subtitle'>Predict deposit subscription likelihood based on customer demographics and campaign data. Powered by machine learning.</p>", unsafe_allow_html=True)
+
+# Create 2 tabs
 app_tabs = st.tabs(["Customer Analysis", "Model Insights"]) 
 
-# App tab for model usage
+# Customer Analysis tab
 with app_tabs[0]:
-    # Name of app
-    st.markdown(
-        "<h1 style='text-align:center; font-size: 80px; color: #E16600; font-weight: bold;'>INFINIREACH</h1>",
-        unsafe_allow_html=True
-    )
-
-    # Web app description
-    st.markdown("<p class='subtitle'>Predict deposit subscription likelihood based on customer demographics and campaign data. Powered by machine learning.</p>", unsafe_allow_html=True)
-
     # Sidebar form title
     st.sidebar.markdown(
         "<span style='font-size: 28px; color: #3B36C9; font-weight: bold;'>Deposit Predictor</span>",
@@ -224,18 +224,8 @@ with app_tabs[0]:
         else:
             st.info("👈 Enter inputs and click **Predict** to view campaign suggestions.")
 
-# App tab for model info         
+# Model Insights tab         
 with app_tabs[1]:
-
-# Name of app
-    st.markdown(
-        "<h1 style='text-align:center; font-size: 80px; color: #E16600; font-weight: bold;'>INFINIREACH</h1>",
-        unsafe_allow_html=True
-    )
-
-    # Web app description
-    st.markdown("<p class='subtitle'>Predict deposit subscription likelihood based on customer demographics and campaign data. Powered by machine learning.</p>", unsafe_allow_html=True)
-
     # Feature importance visual
     with st.expander("🔍 Feature Importance", expanded=True):
         fig_imp, ax_imp = plt.subplots()
