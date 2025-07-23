@@ -151,7 +151,7 @@ with app_tabs[0]:
             "Avg. Yearly Balance": f"${balance:,.2f}",
             "Month": month,
             "Day": day,
-            "Contact Duration": duration,
+            "Contact Duration (sec.)": duration,
             "Campaign": campaign,
             "Days Since": pdays
         }
