@@ -144,7 +144,7 @@ with app_tabs[0]:
         proba = model.predict_proba(X_input)[0]
 
     # Summary of inputted customer stats
-    with st.expander("👤 Customer Profile Used for Prediction", expanded=True):
+    with st.expander("👤 Customer Profile", expanded=True):
         summary_data = {
             "Age": age,
             "Job Category": job,
