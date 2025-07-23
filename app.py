@@ -68,7 +68,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Divide app into 2 tabs
-app_tabs = st.tabs(["Use the Model", "About the Model"]) 
+app_tabs = st.tabs(["Customer Analysis", "Model Insights"]) 
 
 # App tab for model usage
 with app_tabs[0]:
