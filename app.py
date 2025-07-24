@@ -64,6 +64,9 @@ st.markdown("""
     canvas {
         max-width: 100% !important;
     }
+    [data-testid="stHorizontalBlock"] {
+        flex-wrap: wrap !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
@@ -81,6 +84,9 @@ app_tabs = st.tabs(["Customer Analysis", "Model Insights"])
 
 # Customer Analysis tab
 with app_tabs[0]:
+    # Tab title
+    st.markdown("<span style='font-size: 28px; color: #E16600; font-weight: bold;'>Customer Analysis</span>", unsafe_allow_html=True)
+
     # Sidebar form title
     st.sidebar.markdown(
         "<span style='font-size: 28px; color: #3B36C9; font-weight: bold;'>Deposit Predictor</span>",
@@ -145,19 +151,22 @@ with app_tabs[0]:
 
     # Summary of inputted customer stats
     with st.expander("👤 Customer Profile", expanded=True):
-        summary_data = {
-            "Age": age,
-            "Job Category": job,
-            "Avg. Yearly Balance": f"${balance:,.2f}",
-            "Month": month,
-            "Day": day,
-            "Contact Duration (sec.)": duration,
-            "Campaign": campaign,
-            "Days Since": pdays
-        }
-        df_summary = pd.DataFrame.from_dict(summary_data, orient="index", columns=["Values"])
-        df_summary["Values"] = df_summary["Values"].astype(str)
-        st.table(df_summary)
+        st.markdown(f"""
+            <table style='width: 100%; border-collapse: collapse; font-size: 16px; color: #070384;'>
+                <tr>
+                    <th style='text-align: left; padding: 8px; color: #E16600;'>Feature</th>
+                    <th style='text-align: left; padding: 8px; color: #E16600;'>Value</th>
+                </tr>
+                <tr><td style='padding: 8px;'>Age</td><td style='padding: 8px;'>{age}</td></tr>
+                <tr><td style='padding: 8px;'>Job Category</td><td style='padding: 8px;'>{job}</td></tr>
+                <tr><td style='padding: 8px;'>Avg. Yearly Balance</td><td style='padding: 8px;'>${balance:,.2f}</td></tr>
+                <tr><td style='padding: 8px;'>Month</td><td style='padding: 8px;'>{month}</td></tr>
+                <tr><td style='padding: 8px;'>Day</td><td style='padding: 8px;'>{day}</td></tr>
+                <tr><td style='padding: 8px;'>Contact Duration (sec.)</td><td style='padding: 8px;'>{duration}</td></tr>
+                <tr><td style='padding: 8px;'>Campaign</td><td style='padding: 8px;'>{campaign}</td></tr>
+                <tr><td style='padding: 8px;'>Days Since</td><td style='padding: 8px;'>{pdays}</td></tr>
+            </table>
+        """, unsafe_allow_html=True)
 
     # Model prediction results visual
     with st.expander("📊 Probability Prediction", expanded=True):
@@ -226,6 +235,9 @@ with app_tabs[0]:
 
 # Model Insights tab         
 with app_tabs[1]:
+    # Tab title
+    st.markdown("<span style='font-size: 28px; color: #E16600; font-weight: bold;'>Model Insights</span>", unsafe_allow_html=True)
+
     # Feature importance visual
     with st.expander("🔍 Feature Importance", expanded=True):
         fig_imp, ax_imp = plt.subplots()
