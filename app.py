@@ -176,8 +176,8 @@ with app_tabs[0]:
             st.markdown(
                 f"""
                 <div style='font-size: 28px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px;'>
-                    <h2 style='color: #3B36C9; font-size: 25px; font-weight: bold; margin: 0;'>Subscription Likelihood:</h2>
-                    <span style='font-size: 25px; font-weight: bold; color: #333;'>{result_text}</span>
+                    <h2 style='color: #070384; font-size: 25px; font-weight: bold; margin: 0;'>Subscription Likelihood:</h2>
+                    <span style='font-size: 25px; font-weight: bold; color: #070384;'>{result_text}</span>
                 </div>
                 """,
                 unsafe_allow_html=True
@@ -218,7 +218,7 @@ with app_tabs[0]:
                     suggestions.append("💰 Offer incentives, low balance customers may need stronger motivation.")
                 if suggestions:
                     for s in suggestions:
-                        st.markdown(f"- {s}")
+                        st.markdown(f"<p style='color:#070384; font-size:16px;'>• {s}</p>", unsafe_allow_html=True)
                 else:
                     st.markdown("✅ Campaign strategy is generally strong. Consider refining message tone or communication type.")
             # Suggestions if deposit subscription is likely
@@ -261,30 +261,45 @@ with app_tabs[1]:
             fig, ax = plt.subplots()
             xgb.plot_importance(model, ax=ax, importance_type=imp_type)
             st.pyplot(fig)
-            st.markdown(f"<p style='color:#3B36C9;'>{info['desc']}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color:#070384;'>{info['desc']}</p>", unsafe_allow_html=True)
 
     # Model performance stats
     with st.expander("⚙️ Model Performance", expanded=False):
         st.markdown("""
-        - **Accuracy:** 84%  
-        - **Precision:**
-            - No Deposit: 86%
-            - Deposit: 81%
-        - **Recall:**
-            - No Deposit: 83%
-            - Deposit: 85%
-        - **F1-Score:**
-            - No Deposit: 84%
-            - Deposit: 83%
-        - **Macro Average F1-Score:** 84%
-        - **Weighted Average F1-Score:** 84%
-        - **Support:** 2,233 records
-        """)
+        <div style='color:#070384; font-size:16px;'>
+            <ul>
+                <li><b>Accuracy:</b> 84%</li>
+                <li><b>Precision:</b>
+                    <ul>
+                        <li>No Deposit: 86%</li>
+                        <li>Deposit: 81%</li>
+                    </ul>
+                </li>
+                <li><b>Recall:</b>
+                    <ul>
+                        <li>No Deposit: 83%</li>
+                        <li>Deposit: 85%</li>
+                    </ul>
+                </li>
+                <li><b>F1-Score:</b>
+                    <ul>
+                        <li>No Deposit: 84%</li>
+                        <li>Deposit: 83%</li>
+                    </ul>
+                </li>
+                <li><b>Macro Average F1-Score:</b> 84%</li>
+                <li><b>Weighted Average F1-Score:</b> 84%</li>
+                <li><b>Support:</b> 2,233 records</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
 
     # How the model works
     with st.expander("ℹ️ How This Works", expanded=False):
         st.markdown("""
-        InfiniReach uses an XGBoost machine learning model trained on historical marketing campaign data from InfiniBank to predict if a customer is likely to subscribe to a term deposit.  
-        Predictions are based on contact timing, frequency, past outcomes, and customer profile features like age, balance, and job type.
-        """)
+        <div style='color:#070384; font-size:16px;'>
+            InfiniReach uses an XGBoost machine learning model trained on historical marketing campaign data from InfiniBank to predict if a customer is likely to subscribe to a term deposit.<br><br>
+            Predictions are based on contact timing, frequency, past outcomes, and customer profile features like age, balance, and job type.
+        </div>
+        """, unsafe_allow_html=True)
 
