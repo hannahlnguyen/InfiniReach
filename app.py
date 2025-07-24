@@ -240,9 +240,28 @@ with app_tabs[1]:
 
     # Feature importance visual
     with st.expander("🔍 Feature Importance", expanded=True):
-        fig_imp, ax_imp = plt.subplots()
-        xgb.plot_importance(model, ax=ax_imp)
-        st.pyplot(fig_imp)
+        importance_info = {
+        "weight": {
+            "title": "Feature Importance by Weight",
+            "desc": "How often each feature was used in the model's decision-making process (split count)."
+        },
+        "gain": {
+            "title": "Feature Importance by Gain",
+            "desc": "How much each feature improved model accuracy when it was used (information gain)."
+        },
+        "cover": {
+            "title": "Feature Importance by Cover",
+            "desc": "How many samples each feature helped split across all trees (data coverage)."
+        }
+    }
+
+        # Loop and display all importance types
+        for imp_type, info in importance_info.items():
+            st.markdown(f"<h3 style='color:#E16600;'>{info['title']}</h3>", unsafe_allow_html=True)
+            fig, ax = plt.subplots()
+            xgb.plot_importance(model, ax=ax, importance_type=imp_type)
+            st.pyplot(fig)
+            st.markdown(f"<p style='color:#3B36C9;'>{info['desc']}</p>", unsafe_allow_html=True)
 
     # Model performance stats
     with st.expander("⚙️ Model Performance", expanded=False):
