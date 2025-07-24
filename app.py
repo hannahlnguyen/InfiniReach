@@ -243,15 +243,15 @@ with app_tabs[1]:
         importance_info = {
         "weight": {
             "title": "Feature Importance by Weight",
-            "desc": "How often each feature was used in the model's decision-making process (split count)"
+            "desc": "How often each feature was used in the model's decision-making process (split count)."
         },
         "gain": {
             "title": "Feature Importance by Gain",
-            "desc": "How much each feature improved model accuracy when it was used (information gain)"
+            "desc": "How much each feature improved model accuracy when it was used (information gain)."
         },
         "cover": {
             "title": "Feature Importance by Cover",
-            "desc": "How many samples each feature helped split across all trees (data coverage)"
+            "desc": "How many samples each feature helped split across all trees (data coverage)."
         }
     }
 
