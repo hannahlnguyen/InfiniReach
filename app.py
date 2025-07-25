@@ -258,9 +258,32 @@ with app_tabs[1]:
         # Loop and display all importance types
         for imp_type, info in importance_info.items():
             st.markdown(f"<h3 style='color:#E16600;'>{info['title']}</h3>", unsafe_allow_html=True)
-            fig, ax = plt.subplots()
-            xgb.plot_importance(model, ax=ax, importance_type=imp_type)
+            # Get feature importances
+            booster = model.get_booster()
+            score = booster.get_score(importance_type=imp_type)
+
+            # Convert to sorted DataFrame
+            importance_df = pd.DataFrame.from_dict(score, orient='index', columns=['Importance'])
+            importance_df.index.name = 'Feature'
+            importance_df = importance_df.sort_values(by='Importance', ascending=True)
+            importance_df['Importance'] = importance_df['Importance'].round(1)
+
+            # Plot with annotations
+            fig, ax = plt.subplots(figsize=(6, 4))
+            bars = ax.barh(importance_df.index, importance_df['Importance'], color='#3B36C9')
+            ax.set_xlabel('Importance')
+            ax.set_title(info['title'])
+
+            # Annotate each bar with its value
+            for bar in bars:
+                width = bar.get_width()
+                ax.text(width - 0.02, bar.get_y() + bar.get_height() / 2,
+                    f'{width:.1f}', va='center', ha='right', fontsize=9, color='black')
+
+
             st.pyplot(fig)
+
+
             st.markdown(f"<p style='color:#070384;'>{info['desc']}</p>", unsafe_allow_html=True)
 
     # Model performance stats
