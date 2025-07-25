@@ -79,6 +79,68 @@ st.markdown(
 # Web app description
 st.markdown("<p class='subtitle'>Predict deposit subscription likelihood based on customer demographics and campaign data. Powered by machine learning.</p>", unsafe_allow_html=True)
 
+# Sidebar form title
+st.sidebar.markdown(
+    "<span style='font-size: 28px; color: #3B36C9; font-weight: bold;'>Deposit Predictor</span>",
+    unsafe_allow_html=True
+)
+
+# Match job category name in form to its encoded value
+job_options = {
+    "Admin.": 0,
+    "Blue Collar": 1,
+    "Entrepreneur": 2,
+    "Housemaid": 3,
+    "Management": 4,
+    "Retired": 5,
+    "Self-Employed": 6,
+    "Services": 7,
+    "Student": 8,
+    "Technician": 9,
+    "Unemployed": 10,
+    "Unknown": 11
+}
+
+# Sidebar form input
+with st.sidebar.form("predict_form"):
+    age = st.sidebar.number_input("Age", min_value=18, max_value=100, value=35, help="Customer age in years")
+    job = st.sidebar.selectbox("Job Category", list(job_options.keys()), help="Customer job category")
+    job_encoded = job_options[job]
+    balance = st.sidebar.number_input("Avg. Yearly Balance", value=1000, help="Customer average yearly balance")
+    month = st.sidebar.slider("Month", 1, 12, 5, help="Last contact month (1-12)")
+    day = st.sidebar.slider("Day", 1, 31, 15, help="Last contact day of month")
+    duration = st.sidebar.number_input("Contact Duration", value=100, help="Length of last contact duration with customer (sec.)")
+    campaign = st.sidebar.slider("Campaign", 1, 20, 2, help="Number of contacts to customer during campaign")
+    pdays = st.sidebar.number_input("Days Since", value=999, help="Amount of days since previous campaign")
+
+# Feature Engineering
+# Campaign intensity
+contact_effort_level = campaign * duration
+# Campaign effort vs finances
+balance_per_contact = balance / (campaign + 1)
+
+# Connect input to dataset columns
+X_input = pd.DataFrame([{
+    "age": age,
+    "job": job_encoded,
+    "balance": balance,
+    "month": month,
+    "day": day,
+    "duration": duration,
+    "campaign": campaign,
+    "pdays": pdays,
+    "contact_effort_level": contact_effort_level,
+    "balance_per_contact": balance_per_contact
+}])
+
+# Prediction form button
+predict_btn = st.sidebar.button("Predict")
+prediction = None
+proba = None
+if predict_btn:
+    prediction = model.predict(X_input)[0]
+    proba = model.predict_proba(X_input)[0]
+
 # Create 2 tabs
 app_tabs = st.tabs(["Customer Analysis", "Model Insights"]) 
 
@@ -86,68 +148,6 @@ app_tabs = st.tabs(["Customer Analysis", "Model Insights"])
 with app_tabs[0]:
     # Tab title
     st.markdown("<span style='font-size: 28px; color: #E16600; font-weight: bold;'>Customer Analysis</span>", unsafe_allow_html=True)
-
-    # Sidebar form title
-    st.sidebar.markdown(
-        "<span style='font-size: 28px; color: #3B36C9; font-weight: bold;'>Deposit Predictor</span>",
-        unsafe_allow_html=True
-    )
-
-    # Match job category name in form to its encoded value
-    job_options = {
-        "Admin.": 0,
-        "Blue Collar": 1,
-        "Entrepreneur": 2,
-        "Housemaid": 3,
-        "Management": 4,
-        "Retired": 5,
-        "Self-Employed": 6,
-        "Services": 7,
-        "Student": 8,
-        "Technician": 9,
-        "Unemployed": 10,
-        "Unknown": 11
-    }
-
-    # Sidebar form input
-    with st.sidebar.form("predict_form"):
-        age = st.sidebar.number_input("Age", min_value=18, max_value=100, value=35, help="Customer age in years")
-        job = st.sidebar.selectbox("Job Category", list(job_options.keys()), help="Customer job category")
-        job_encoded = job_options[job]
-        balance = st.sidebar.number_input("Avg. Yearly Balance", value=1000, help="Customer average yearly balance")
-        month = st.sidebar.slider("Month", 1, 12, 5, help="Last contact month (1-12)")
-        day = st.sidebar.slider("Day", 1, 31, 15, help="Last contact day of month")
-        duration = st.sidebar.number_input("Contact Duration", value=100, help="Length of last contact duration with customer (sec.)")
-        campaign = st.sidebar.slider("Campaign", 1, 20, 2, help="Number of contacts to customer during campaign")
-        pdays = st.sidebar.number_input("Days Since", value=999, help="Amount of days since previous campaign")
-
-    # Feature Engineering
-    # Campaign intensity
-    contact_effort_level = campaign * duration
-    # Campaign effort vs finances
-    balance_per_contact = balance / (campaign + 1)
-
-    # Connect input to dataset columns
-    X_input = pd.DataFrame([{
-        "age": age,
-        "job": job_encoded,
-        "balance": balance,
-        "month": month,
-        "day": day,
-        "duration": duration,
-        "campaign": campaign,
-        "pdays": pdays,
-        "contact_effort_level": contact_effort_level,
-        "balance_per_contact": balance_per_contact
-    }])
-
-    # Prediction form button
-    predict_btn = st.sidebar.button("Predict")
-    prediction = None
-    proba = None
-    if predict_btn:
-        prediction = model.predict(X_input)[0]
-        proba = model.predict_proba(X_input)[0]
 
     # Summary of inputted customer stats
     with st.expander("👤 Customer Profile", expanded=True):
