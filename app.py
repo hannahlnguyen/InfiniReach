@@ -27,21 +27,21 @@ st.markdown("""
     .subtitle {
         font-size: 2.2vw !important;
         text-align: center;
-        color: #070384;
+        color: #134271;
         margin-top: 5px;
     }
     [data-testid="stAppViewContainer"] {
-        background: linear-gradient(to bottom, #D1CFFE, #3B36C9);
+        background: linear-gradient(to bottom, #BED6ED, #134271);
         background-attachment: fixed;
     }
     section[data-testid="stSidebar"] > div:first-child {
-        background: linear-gradient(to bottom, #FDDFB2, #FDA51E);
+        background: linear-gradient(to bottom, #FDC9A7, #FF6600);
         height: 100vh;
         overflow-y: auto;
         box-shadow: 0 0 20px rgba(0,0,0,0.2);
     }
     div.stButton > button {
-        background-color: #E16600;
+        background-color: #FF6600;
         color: white;
         border-radius: 20px;
         font-weight: bold;
@@ -51,7 +51,7 @@ st.markdown("""
         transition: color 0.2s ease-in-out;
     }
     div.stButton > button:hover {
-        color: #3B36C9;
+        color: #134271;
         font-weight: bold;
     }  
     div[data-testid="stExpander"] {
@@ -59,7 +59,7 @@ st.markdown("""
         border-radius: 20px;
         padding: 1rem;
         box-shadow: 0 0 20px rgba(0,0,0,0.2);
-        color: #3B36C9
+        color: #FF6600
     }
     canvas {
         max-width: 100% !important;
@@ -72,7 +72,7 @@ st.markdown("""
 
 # Name of app
 st.markdown(
-    "<h1 style='text-align:center; font-size: 80px; color: #E16600; font-weight: bold;'>INFINIREACH</h1>",
+    "<h1 style='text-align:center; font-size: 80px; color: #FF6600; font-weight: bold;'>INFINIREACH</h1>",
     unsafe_allow_html=True
 )
 
@@ -81,7 +81,7 @@ st.markdown("<p class='subtitle'>Predict deposit subscription likelihood based o
 
 # Sidebar form title
 st.sidebar.markdown(
-    "<span style='font-size: 28px; color: #3B36C9; font-weight: bold;'>Deposit Predictor</span>",
+    "<span style='font-size: 28px; color: #134271; font-weight: bold;'>Deposit Predictor</span>",
     unsafe_allow_html=True
 )
 
@@ -147,15 +147,15 @@ app_tabs = st.tabs(["Customer Analysis", "Model Insights"])
 # Customer Analysis tab
 with app_tabs[0]:
     # Tab title
-    st.markdown("<span style='font-size: 28px; color: #E16600; font-weight: bold;'>Customer Analysis</span>", unsafe_allow_html=True)
+    st.markdown("<span style='font-size: 28px; color: #FF6600; font-weight: bold;'>Customer Analysis</span>", unsafe_allow_html=True)
 
     # Summary of inputted customer stats
     with st.expander("👤 Customer Profile", expanded=True):
         st.markdown(f"""
-            <table style='width: 100%; border-collapse: collapse; font-size: 16px; color: #070384;'>
+            <table style='width: 100%; border-collapse: collapse; font-size: 16px; color: #134271;'>
                 <tr>
-                    <th style='text-align: left; padding: 8px; color: #E16600;'>Feature</th>
-                    <th style='text-align: left; padding: 8px; color: #E16600;'>Value</th>
+                    <th style='text-align: left; padding: 8px; color: #FF6600;'>Feature</th>
+                    <th style='text-align: left; padding: 8px; color: #FF6600;'>Value</th>
                 </tr>
                 <tr><td style='padding: 8px;'>Age</td><td style='padding: 8px;'>{age}</td></tr>
                 <tr><td style='padding: 8px;'>Job Category</td><td style='padding: 8px;'>{job}</td></tr>
@@ -176,15 +176,15 @@ with app_tabs[0]:
             st.markdown(
                 f"""
                 <div style='font-size: 28px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px;'>
-                    <h2 style='color: #070384; font-size: 25px; font-weight: bold; margin: 0;'>Subscription Likelihood:</h2>
-                    <span style='font-size: 25px; font-weight: bold; color: #070384;'>{result_text}</span>
+                    <h2 style='color: #134271; font-size: 25px; font-weight: bold; margin: 0;'>Subscription Likelihood:</h2>
+                    <span style='font-size: 25px; font-weight: bold; color: #134271;'>{result_text}</span>
                 </div>
                 """,
                 unsafe_allow_html=True
             )
             # Horizontal bar chart (deposit subscription likelihood)
             labels = ['Will Not Subscribe', 'Will Subscribe']
-            colors = ['#E16600', '#3B36C9']
+            colors = ['#FF6600', '#134271']
             fig, ax = plt.subplots(figsize=(6, 2))
             bars = ax.barh(labels, proba, color=colors)
             ax.set_xlim(0, 1)
@@ -218,7 +218,7 @@ with app_tabs[0]:
                     suggestions.append("💰 Offer incentives, low balance customers may need stronger motivation.")
                 if suggestions:
                     for s in suggestions:
-                        st.markdown(f"<p style='color:#070384; font-size:16px;'>• {s}</p>", unsafe_allow_html=True)
+                        st.markdown(f"<p style='color:#134271; font-size:16px;'>• {s}</p>", unsafe_allow_html=True)
                 else:
                     st.markdown("✅ Campaign strategy is generally strong. Consider refining message tone or communication type.")
             # Suggestions if deposit subscription is likely
@@ -236,7 +236,7 @@ with app_tabs[0]:
 # Model Insights tab         
 with app_tabs[1]:
     # Tab title
-    st.markdown("<span style='font-size: 28px; color: #E16600; font-weight: bold;'>Model Insights</span>", unsafe_allow_html=True)
+    st.markdown("<span style='font-size: 28px; color: #FF6600; font-weight: bold;'>Model Insights</span>", unsafe_allow_html=True)
 
     # Feature importance visual
     with st.expander("🔍 Feature Importance", expanded=True):
@@ -257,7 +257,7 @@ with app_tabs[1]:
 
         # Loop and display all importance types
         for imp_type, info in importance_info.items():
-            st.markdown(f"<h3 style='color:#E16600;'>{info['title']}</h3>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='color:#FF6600;'>{info['title']}</h3>", unsafe_allow_html=True)
             # Get feature importances
             booster = model.get_booster()
             score = booster.get_score(importance_type=imp_type)
@@ -268,7 +268,7 @@ with app_tabs[1]:
             importance_df['Importance'] = importance_df['Importance'].round(1)
             # Plot graphs
             fig, ax = plt.subplots(figsize=(6, 4))
-            bars = ax.barh(importance_df.index, importance_df['Importance'], color='#3B36C9')
+            bars = ax.barh(importance_df.index, importance_df['Importance'], color='#134271')
             ax.set_xlabel('Importance')
             ax.set_title(info['title'])
     
@@ -278,12 +278,12 @@ with app_tabs[1]:
                     f'{width:.1f}', va='center', ha='right', fontsize=9, color='black')
 
             st.pyplot(fig)
-            st.markdown(f"<p style='color:#070384;'>{info['desc']}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='color:#134271;'>{info['desc']}</p>", unsafe_allow_html=True)
 
     # Model performance stats
     with st.expander("⚙️ Model Performance", expanded=False):
         st.markdown("""
-        <div style='color:#070384; font-size:16px;'>
+        <div style='color:#134271; font-size:16px;'>
             <ul>
                 <li><b>Accuracy:</b> 84%</li>
                 <li><b>Precision:</b>
@@ -314,7 +314,7 @@ with app_tabs[1]:
     # How the model works
     with st.expander("ℹ️ How This Works", expanded=False):
         st.markdown("""
-        <div style='color:#070384; font-size:16px;'>
+        <div style='color:#134271; font-size:16px;'>
             InfiniReach uses an XGBoost machine learning model trained on historical marketing campaign data from InfiniBank to predict if a customer is likely to subscribe to a term deposit.<br><br>
             Predictions are based on contact timing, frequency, past outcomes, and customer profile features like age, balance, and job type.
         </div>
