@@ -114,9 +114,9 @@ with st.sidebar.form("predict_form"):
     pdays = st.sidebar.number_input("Days Since", value=999, help="Amount of days since previous campaign")
 
 # Feature Engineering
-# Campaign intensity
+# Campaign intensity, how much effort was spent trying to contact a customer
 contact_effort_level = campaign * duration
-# Campaign effort vs finances
+# Campaign effort vs finances, how much yearly balance is associated with each contact attempt
 balance_per_contact = balance / (campaign + 1)
 
 # Connect input to dataset columns
