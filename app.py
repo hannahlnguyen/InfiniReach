@@ -268,7 +268,7 @@ with app_tabs[1]:
             importance_df['Importance'] = importance_df['Importance'].round(1)
             # Plot graphs
             fig, ax = plt.subplots(figsize=(6, 4))
-            bars = ax.barh(importance_df.index, importance_df['Importance'], color='#134271')
+            bars = ax.barh(importance_df.index, importance_df['Importance'], color='#BED6ED')
             ax.set_xlabel('Importance')
             ax.set_title(info['title'])
     
