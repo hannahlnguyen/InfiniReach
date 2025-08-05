@@ -103,15 +103,15 @@ job_options = {
 
 # Sidebar form input
 with st.sidebar.form("predict_form"):
-    age = st.sidebar.number_input("Age", min_value=18, max_value=100, value=35, help="Customer age in years")
+    age = st.sidebar.number_input("Age", min_value=18, max_value=100, value=67, help="Customer age in years")
     job = st.sidebar.selectbox("Job Category", list(job_options.keys()), help="Customer job category")
     job_encoded = job_options[job]
     balance = st.sidebar.number_input("Avg. Yearly Balance", value=1000, help="Customer average yearly balance")
     month = st.sidebar.slider("Month", 1, 12, 5, help="Last contact month (1-12)")
     day = st.sidebar.slider("Day", 1, 31, 15, help="Last contact day of month")
     duration = st.sidebar.number_input("Contact Duration", value=100, help="Length of last contact duration with customer (sec.)")
-    campaign = st.sidebar.slider("Campaign", 1, 20, 2, help="Number of contacts to customer during campaign")
-    pdays = st.sidebar.number_input("Days Since", value=999, help="Amount of days since previous campaign")
+    campaign = st.sidebar.slider("Campaign", 1, 20, 5, help="Number of contacts to customer during campaign")
+    pdays = st.sidebar.number_input("Days Since", value=300, help="Amount of days since previous campaign")
 
 # Feature Engineering
 # Campaign intensity, how much effort was spent trying to contact a customer
